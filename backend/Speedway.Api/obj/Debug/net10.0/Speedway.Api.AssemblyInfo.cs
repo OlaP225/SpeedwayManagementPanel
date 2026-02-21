@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Speedway.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af308c9f4c6624967056342b009a87bc7a9f15c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Speedway.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Speedway.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
