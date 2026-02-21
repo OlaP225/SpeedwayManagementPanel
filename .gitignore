@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# My files
+bin/
+obj/
+**[out]/
+**[Generated]/
+backend/Speedway.Api/appsettings.json
+backend/Speedway.Api/appsettings.Development.json
+.DS_Store
