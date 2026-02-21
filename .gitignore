@@ -26,8 +26,6 @@ dist-ssr
 # My files
 bin/
 obj/
-**[out]/
-**[Generated]/
 backend/Speedway.Api/appsettings.json
 backend/Speedway.Api/appsettings.Development.json
 .DS_Store
