@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Speedway.Api.Data;
+using Speedway.Api.DTOs.Team;
+using Speedway.Api.Mappers;
+using Speedway.Api.Models;
 
 namespace Speedway.Api.Controllers
 {
@@ -21,7 +24,8 @@ namespace Speedway.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var teams = _context.Team.ToList();
+            var teams = _context.Team.ToList()
+            .Select(t => t.ToTeamDTO());
             return Ok(teams);
         }
 
@@ -35,7 +39,7 @@ namespace Speedway.Api.Controllers
             }
             else
             {
-                return Ok(team);
+                return Ok(team.ToTeamDTO());
             }
         }
 
