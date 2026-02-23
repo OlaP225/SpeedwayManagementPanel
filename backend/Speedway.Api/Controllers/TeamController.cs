@@ -43,6 +43,15 @@ namespace Speedway.Api.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateTeamRequestDTO teamRequestDTO)
+        {
+            var teamModel = teamRequestDTO.ToTeamFromCreateDTO();
+            _context.Team.Add(teamModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel.ToTeamDTO());
+        }
+
 
 
     }
