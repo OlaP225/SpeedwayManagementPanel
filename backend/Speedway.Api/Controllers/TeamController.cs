@@ -44,12 +44,27 @@ namespace Speedway.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateTeamRequestDTO teamRequestDTO)
+        public IActionResult Create([FromBody] CreateTeamRequestDTO createTeamDTO)
         {
-            var teamModel = teamRequestDTO.ToTeamFromCreateDTO();
+            var teamModel = createTeamDTO.ToTeamFromCreateDTO();
             _context.Team.Add(teamModel);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel.ToTeamDTO());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateTeamRequestDTO updateTeamDTO)
+        {
+            var teamModel = _context.Team.Find(id);
+            if (teamModel == null)
+            {
+                return NotFound();
+            }
+            
+            teamModel.Name = updateTeamDTO.Name;
+            _context.SaveChanges();
+            return Ok(teamModel.ToTeamDTO());
         }
 
 
