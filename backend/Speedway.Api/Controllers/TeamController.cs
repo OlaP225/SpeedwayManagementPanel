@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Speedway.Api.Data;
 using Speedway.Api.DTOs.Team;
 using Speedway.Api.Mappers;
@@ -22,17 +23,17 @@ namespace Speedway.Api.Controllers
         }
         
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var teams = _context.Team.ToList()
-            .Select(t => t.ToTeamDTO());
-            return Ok(teams);
+            var teams = await _context.Team.ToListAsync();
+            var teamsDTO = teams.Select(t => t.ToTeamDTO());
+            return Ok(teamsDTO);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var team = _context.Team.Find(id);
+            var team = await _context.Team.FindAsync(id);
             if (team == null)
             {
                 return NotFound();
@@ -44,30 +45,49 @@ namespace Speedway.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateTeamRequestDTO createTeamDTO)
+        public async Task<IActionResult> Create([FromBody] CreateTeamRequestDTO createTeamDTO)
         {
             var teamModel = createTeamDTO.ToTeamFromCreateDTO();
-            _context.Team.Add(teamModel);
-            _context.SaveChanges();
+            await _context.Team.AddAsync(teamModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel.ToTeamDTO());
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateTeamRequestDTO updateTeamDTO)
+        public async Task <IActionResult> Update([FromRoute] int id, [FromBody] UpdateTeamRequestDTO updateTeamDTO)
         {
-            var teamModel = _context.Team.Find(id);
+            var teamModel = await _context.Team.FindAsync(id);
             if (teamModel == null)
             {
                 return NotFound();
             }
             
             teamModel.Name = updateTeamDTO.Name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(teamModel.ToTeamDTO());
         }
 
-
-
+        [HttpDelete]
+        [Route("{id}")] //same as [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var teamModel = await _context.Team.FindAsync(id);
+            if (teamModel == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Team.Remove(teamModel);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+        }
     }
+
+    
+
+
+
 }
