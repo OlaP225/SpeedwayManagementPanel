@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Speedway.Api.Data;
 using Speedway.Api.DTOs.Team;
+using Speedway.Api.Interfaces;
 using Speedway.Api.Mappers;
 using Speedway.Api.Models;
 
@@ -17,15 +18,17 @@ namespace Speedway.Api.Controllers
     public class TeamController: ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        public TeamController(ApplicationDBContext context)
+        private readonly ITeamRepository _teamRepository;
+        public TeamController(ApplicationDBContext context, ITeamRepository teamRepository)
         {
+            _teamRepository = teamRepository;
             _context = context;
         }
         
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var teams = await _context.Team.ToListAsync();
+            var teams = await _teamRepository.GetAllAsync();
             var teamsDTO = teams.Select(t => t.ToTeamDTO());
             return Ok(teamsDTO);
         }

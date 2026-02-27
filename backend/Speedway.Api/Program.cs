@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Speedway.Api.Data;
+using Speedway.Api.Interfaces;
+using Speedway.Api.Repository;
 // using Scalar.AspNetCore; for now i switch to swagger
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,8 @@ builder.Services.AddDbContext<ApplicationDBContext> (options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 }
 );
+
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 
 var app = builder.Build();
 
