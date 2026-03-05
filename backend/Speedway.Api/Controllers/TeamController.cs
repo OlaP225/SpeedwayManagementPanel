@@ -36,7 +36,7 @@ namespace Speedway.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var team = await _context.Team.FindAsync(id);
+            var team = await _teamRepository.GetByIdAsync(id);
             if (team == null)
             {
                 return NotFound();
@@ -51,8 +51,7 @@ namespace Speedway.Api.Controllers
         public async Task<IActionResult> Create([FromBody] CreateTeamRequestDTO createTeamDTO)
         {
             var teamModel = createTeamDTO.ToTeamFromCreateDTO();
-            await _context.Team.AddAsync(teamModel);
-            await _context.SaveChangesAsync();
+            await _teamRepository.CreateAsync(teamModel);
             return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel.ToTeamDTO());
         }
 
@@ -60,32 +59,24 @@ namespace Speedway.Api.Controllers
         [Route("{id}")]
         public async Task <IActionResult> Update([FromRoute] int id, [FromBody] UpdateTeamRequestDTO updateTeamDTO)
         {
-            var teamModel = await _context.Team.FindAsync(id);
+            var teamModel = await _teamRepository.UpdateAsync(id, updateTeamDTO);
             if (teamModel == null)
             {
-                return NotFound();
+                
             }
-            
-            teamModel.Name = updateTeamDTO.Name;
-            await _context.SaveChangesAsync();
-            return Ok(teamModel.ToTeamDTO());
+            return Ok(teamModel!.ToTeamDTO());
         }
 
         [HttpDelete]
         [Route("{id}")] //same as [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var teamModel = await _context.Team.FindAsync(id);
+            var teamModel = await _teamRepository.DeleteAsync(id);
             if (teamModel == null)
             {
                 return NotFound();
             }
-            else
-            {
-                _context.Team.Remove(teamModel);
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
+            return NoContent();
         }
     }
 

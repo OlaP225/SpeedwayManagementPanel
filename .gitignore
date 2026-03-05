@@ -29,3 +29,5 @@ obj/
 backend/Speedway.Api/appsettings.json
 backend/Speedway.Api/appsettings.Development.json
 .DS_Store
+
+.fake
