@@ -9,6 +9,8 @@ namespace Speedway.Api.Models
     {
         public int Id { get; set; }
 
+        public int HeatNumber { get; set; }
+
         // players
         public int Player1Id { get; set; }
         public int Player2Id { get; set; }
